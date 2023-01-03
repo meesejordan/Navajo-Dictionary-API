@@ -1,18 +1,20 @@
 const Word = require("../models/word");
 
 const getAllWordsStatic = async (req, res) => {
-    const words = await Word.find({});
+    const queryObject = {};
+    queryObject.wordDefinitions = { $regex: "it", $options: "i" };
+    const words = await Word.find(queryObject);
 
-    res.status(200).json({ words, length: words.length });
+    res.status(200).json({ words, numWords: words.length });
 };
 
 const getAllWords = async (req, res) => {
-    const { name, sort, fields } = req.body;
+    const { search, sort, fields } = req.body;
     const queryObject = {};
 
-    // check if name is provided
-    if (name) {
-        queryObject.name = { $regex: name, $options: "i" };
+    // check ifsearch parameter is pass, then search wordDefinitions for the search value
+    if (search) {
+        queryObject.wordDefinitions = { $regex: search, $options: "i" };
     }
 
     let result = Word.find(queryObject);

@@ -8,7 +8,7 @@ const jsonWords = require("./words.json");
 const start = async () => {
     try {
         await connectDB(process.env.MONGO_URI);
-        await Word.deleteMany();
+        // await Word.deleteMany();
         await Word.create(jsonWords);
         console.log("success!!");
         process.exit(0);
