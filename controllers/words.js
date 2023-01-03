@@ -9,7 +9,7 @@ const getAllWordsStatic = async (req, res) => {
 };
 
 const getAllWords = async (req, res) => {
-    const { search, sort, fields } = req.body;
+    const { search } = req.query; //, sort, fields } = req.query;
     const queryObject = {};
 
     // check ifsearch parameter is pass, then search wordDefinitions for the search value
@@ -17,21 +17,22 @@ const getAllWords = async (req, res) => {
         queryObject.wordDefinitions = { $regex: search, $options: "i" };
     }
 
-    let result = Word.find(queryObject);
+    let result = await Word.find(queryObject);
     // sort on given values or sort on creation date by default
-    if (sort) {
-        // get list of values to sort on
-        const sortList = sort.split(",").join(" ");
-        result = result.sort(sortList);
-    } else {
-        result = result.sort("createdAt");
-    }
+    // if (sort) {
+    //     // get list of values to sort on
+    //     const sortList = sort.split(",").join(" ");
+    //     result = result.sort(sortList);
+    // } else {
+    //     result = result.sort("createdAt");
+    // }
 
-    // Select current fields, like SQL select
-    if (fields) {
-        const fieldsList = fields.split(",").join(" ");
-        result = result.select(fieldsList);
-    }
+    // // Select current fields, like SQL select
+    // if (fields) {
+    //     const fieldsList = fields.split(",").join(" ");
+    //     result = result.select(fieldsList);
+    // }
+    res.status(200).json({ result, numWords: result.length });
 };
 
 module.exports = {
