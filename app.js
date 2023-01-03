@@ -1,6 +1,6 @@
 require("dotenv").config(); //set mongodb URI in env
 require("express-async-errors");
-
+// git push -u origin main
 const express = require("express");
 const app = express();
 
@@ -42,13 +42,14 @@ app.use("/api/v1/words", wordsRouter);
 // middle ware
 app.use(notFoundMiddleware);
 
+// set port
 const port = process.env.PORT || 3000;
 
 const start = async () => {
     try {
         // wait for the database to connect
         await connectDB(process.env.MONGO_URI);
-        console.log("Database connect");
+        console.log("Database connected!");
         app.listen(
             port,
             console.log(`Server is listening on port ${port}....`)

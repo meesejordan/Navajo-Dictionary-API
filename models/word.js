@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 // examples => array of example use of the word. {navajo example:engligh translation}  ex. [// "Yá'át'ééh dóó ahéehee:Hello and thank you",// "Yá'át'ééh abini:Good morning",// ]
 // examplesAudio => array of urls of the given examples. ex: [ //"https://dl.dropbox.com/s/z3gm2v9ezt4vdk1/commonNavajo-1-0", //"https://dl.dropbox.com/s/j0g7iy2gmjig1k8/commonNavajo-1-1", // ],
 
-// 'examples' indices map to 'audioExamples'. IFF audioExamples exist
+// 'examples' indices map to 'examplesAudio'. IFF examplesAudio exist
 const wordSchema = new mongoose.Schema(
     {
         word: {

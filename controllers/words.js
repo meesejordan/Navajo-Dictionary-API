@@ -1,5 +1,7 @@
 const Word = require("../models/word");
-const notFoundError = require("../middleware/not-found");
+// const notFoundError = require("../middleware/not-found");
+const { StatusCodes } = require("http-status-codes");
+const { default: mongoose } = require("mongoose");
 
 const getAllWordsStatic = async (req, res) => {
     // const queryObject = {};
@@ -13,7 +15,7 @@ const getAllWordsStatic = async (req, res) => {
         _id: "63b383cd227e1ecb14d4930d",
     });
 
-    res.status(200).json({ words, numWords: words.length });
+    res.status(StatusCodes.OK).json({ words, numWords: words.length });
 };
 
 const getAllWords = async (req, res) => {
@@ -41,9 +43,9 @@ const getAllWords = async (req, res) => {
     }
 
     // paganation
-    // get page if given, default is 1
+    // get page number if given, default is 1
     const page = Number(req.query.page) || 1;
-    // get limit per page if it is given, default is 10
+    // get limit per page if given, default is 10
     const limit = Number(req.query.limit) || 10;
     // calculate how many words to skip
     const skip = (page - 1) * limit;
@@ -54,7 +56,7 @@ const getAllWords = async (req, res) => {
         .select(fieldsList) // return selected fields
         .skip(skip) // skip based on paganation
         .limit(limit); // return limit of words
-    res.status(200).json({ result, numWords: result.length });
+    res.status(StatusCodes.OK).json({ result, numWords: result.length });
 };
 
 // gets word based of mongo generate id '_id'
@@ -64,16 +66,25 @@ const getWord = async (req, res) => {
         params: { id: wordId },
     } = req;
 
+    // check if wordId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(wordId)) {
+        res.status(StatusCodes.UNPROCESSABLE_ENTITY).send(
+            `${wordId} is not a valid id`
+        );
+        return;
+    }
+
     // get word with matching id
     const word = await Word.findOne({ _id: wordId });
 
     // if no word exits, throw error
     if (!word) {
-        throw new notFoundError(`No job with id ${jobId}`);
+        res.status(StatusCodes.NOT_FOUND).send(`No job with id ${jobId}`);
+        // throw new notFoundError(`No job with id ${jobId}`);
     }
 
     // send word with matching id
-    res.status(200).json({ word, numWords: word.length });
+    res.status(StatusCodes.OK).json({ word, numWords: word.length });
 };
 
 module.exports = {

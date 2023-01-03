@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {
     getAllWords,
-    getAllWordsStatic,
+    // getAllWordsStatic,
     getWord,
 } = require("../controllers/words");
 
