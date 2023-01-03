@@ -2,14 +2,16 @@ const Word = require("../models/word");
 
 const getAllWordsStatic = async (req, res) => {
     const queryObject = {};
-    queryObject.wordDefinitions = { $regex: "it", $options: "i" };
-    const words = await Word.find(queryObject);
+    // queryObject.wordDefinitions = { $regex: "it", $options: "i" };
+    const words = await Word.find(queryObject).sort("word");
 
     res.status(200).json({ words, numWords: words.length });
 };
 
 const getAllWords = async (req, res) => {
-    const { search } = req.query; //, sort, fields } = req.query;
+    console.log(req.query);
+    const { search, sort } = req.query; //, fields } = req.query;
+    test = req.query.sort;
     const queryObject = {};
 
     // check ifsearch parameter is pass, then search wordDefinitions for the search value
@@ -19,13 +21,12 @@ const getAllWords = async (req, res) => {
 
     let result = await Word.find(queryObject);
     // sort on given values or sort on creation date by default
-    // if (sort) {
-    //     // get list of values to sort on
-    //     const sortList = sort.split(",").join(" ");
-    //     result = result.sort(sortList);
-    // } else {
-    //     result = result.sort("createdAt");
-    // }
+    if (test) {
+        // get list of values to sort on
+        const sortList = test.split(",").join(" ");
+        console.log(sortList);
+        result = await result.sort(sortList);
+    }
 
     // // Select current fields, like SQL select
     // if (fields) {
