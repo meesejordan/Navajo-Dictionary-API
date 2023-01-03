@@ -1,9 +1,17 @@
 const Word = require("../models/word");
+const notFoundError = require("../middleware/not-found");
 
 const getAllWordsStatic = async (req, res) => {
-    const queryObject = {};
+    // const queryObject = {};
+    const {
+        params: { id: wordId },
+    } = req;
+    console.log(wordId);
     // queryObject.wordDefinitions = { $regex: "it", $options: "i" };
-    const words = await Word.find(queryObject).sort("word").select("");
+    // const words = await Word.find(queryObject).sort("word").select("");
+    const words = await Word.findOne({
+        _id: "63b383cd227e1ecb14d4930d",
+    });
 
     res.status(200).json({ words, numWords: words.length });
 };
@@ -49,7 +57,27 @@ const getAllWords = async (req, res) => {
     res.status(200).json({ result, numWords: result.length });
 };
 
+// gets word based of mongo generate id '_id'
+const getWord = async (req, res) => {
+    // get id from paramters
+    const {
+        params: { id: wordId },
+    } = req;
+
+    // get word with matching id
+    const word = await Word.findOne({ _id: wordId });
+
+    // if no word exits, throw error
+    if (!word) {
+        throw new notFoundError(`No job with id ${jobId}`);
+    }
+
+    // send word with matching id
+    res.status(200).json({ word, numWords: word.length });
+};
+
 module.exports = {
     getAllWords,
     getAllWordsStatic,
+    getWord,
 };
