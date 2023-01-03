@@ -1,7 +1,9 @@
 const Word = require("../models/word");
 
 const getAllWordsStatic = async (req, res) => {
-    res.status(200).send("getAllwords");
+    const words = await Word.find({});
+
+    res.status(200).json({ words, length: words.length });
 };
 
 const getAllWords = async (req, res) => {
@@ -26,7 +28,7 @@ const getAllWords = async (req, res) => {
     // Select current fields, like SQL select
     if (fields) {
         const fieldsList = fields.split(",").join(" ");
-        result = result.select(fieldsLists);
+        result = result.select(fieldsList);
     }
 };
 
