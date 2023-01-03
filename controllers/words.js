@@ -9,7 +9,7 @@ const getAllWordsStatic = async (req, res) => {
 };
 
 const getAllWords = async (req, res) => {
-    console.log(req.query);
+    // console.log(req.query);
     const { search, fields } = req.query;
     const queryObject = {};
     let sortList = "";
@@ -32,8 +32,20 @@ const getAllWords = async (req, res) => {
         fieldsList = fields.split(",").join(" ");
     }
 
+    // paganation
+    // get page if given, default is 1
+    const page = Number(req.query.page) || 1;
+    // get limit per page if it is given, default is 10
+    const limit = Number(req.query.limit) || 10;
+    // calculate how many words to skip
+    const skip = (page - 1) * limit;
+
     // Finally, search words based on search query, get words sorted on given sort value and finally return the fields of the given field values
-    let result = await Word.find(queryObject).sort(sortList).select(fieldsList);
+    let result = await Word.find(queryObject)
+        .sort(sortList) //sort on given field
+        .select(fieldsList) // return selected fields
+        .skip(skip) // skip based on paganation
+        .limit(limit); // return limit of words
     res.status(200).json({ result, numWords: result.length });
 };
 
