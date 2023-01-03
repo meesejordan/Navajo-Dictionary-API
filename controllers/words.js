@@ -1,10 +1,10 @@
 const Word = require("../models/word");
 
 const getAllWordsStatic = async (req, res) => {
-    const products = await Product.find({});
+    res.status(200).send("getAllwords");
 };
 
-const getAllProducts = async (req, res) => {
+const getAllWords = async (req, res) => {
     const { name, sort, fields } = req.body;
     const queryObject = {};
 
@@ -28,4 +28,9 @@ const getAllProducts = async (req, res) => {
         const fieldsList = fields.split(",").join(" ");
         result = result.select(fieldsLists);
     }
+};
+
+module.exports = {
+    getAllWords,
+    getAllWordsStatic,
 };

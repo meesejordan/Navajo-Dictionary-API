@@ -7,9 +7,14 @@ const app = express();
 // connect to database
 const connectDB = require("./db/connectDB");
 
+// import routers
+const wordsRouter = require("./routes/words");
 app.get("/", (req, res) => {
     res.send("Navajo Dictionary API");
 });
+
+// Words route
+app.use("/api/v1/words", wordsRouter);
 
 const port = process.env.PORT || 3000;
 
