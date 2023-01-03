@@ -7,6 +7,9 @@ const app = express();
 // connect to database
 const connectDB = require("./db/connectDB");
 
+// import middleware
+const notFoundMiddleware = require("./middleware/not-found");
+
 // import routers
 const wordsRouter = require("./routes/words");
 app.get("/", (req, res) => {
@@ -15,6 +18,9 @@ app.get("/", (req, res) => {
 
 // Words route
 app.use("/api/v1/words", wordsRouter);
+
+// middle ware
+app.use(notFoundMiddleware);
 
 const port = process.env.PORT || 3000;
 
