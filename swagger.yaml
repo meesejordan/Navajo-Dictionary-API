@@ -1,0 +1,96 @@
+openapi: 3.0.0
+
+info:
+    title: Navajo-Dictionary-API
+    description: "This is a simple sample Navajo Dictionary API. My goal was to teach myself how to create a RESTful API and is to aid those that are currently learning how to program. This also serves as a public resource for those that want to use Navajo words in a meaningful way such as creating learning games as the Navajo language is considered a dying Language"
+
+    contact: {}
+
+    version: "1.0"
+
+servers:
+    - url: https://navajo-dictionary-api.up.railway.app/api/v1
+
+      variables: {}
+
+paths:
+    /words:
+        get:
+            tags:
+                - Words
+
+            summary: Get All Words.
+
+            operationId: GetAllWords
+
+            parameters:
+                - in: query
+                  name: search
+                  schema:
+                      type: string
+                  description: Search an english word to match inside all Word definitions
+
+                - in: query
+                  name: sort
+                  schema:
+                      type: string
+                  description: Sort on the fields given
+
+                - in: query
+                  name: fields
+                  schema:
+                      type: string
+                  description: Return only the fields in the Words given
+
+                - in: query
+                  name: page
+                  schema:
+                      type: integer
+                  description: Get Words on given page number, default is 1
+
+                - in: query
+                  name: limit
+                  schema:
+                      type: integer
+                  description: Limit number of Words per page, default is 10
+
+            responses:
+                "200":
+                    description: "Successfully got words"
+
+                    headers: {}
+
+            deprecated: false
+
+    /word/{id}:
+        get:
+            summary: Get a Word by ID
+            tags:
+                - Words
+            parameters:
+                - in: path
+                  name: id
+                  schema:
+                      type: string
+                  required: true
+                  description: Numeric ID of the user to get
+            responses:
+                "200":
+                    description: "Successfully found a Word with matching id"
+
+                    headers: {}
+
+                "404":
+                    description: "No Word was found with given id"
+
+                    headers: {}
+
+                "422":
+                    description: "Given id is not a valid mongoose Objectid id"
+
+                    headers: {}
+
+tags:
+    - name: Words
+
+      description: ""

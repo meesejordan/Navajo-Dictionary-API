@@ -1,5 +1,6 @@
 require("dotenv").config(); //set mongodb URI in env
 require("express-async-errors");
+
 // git push -u origin main
 const express = require("express");
 const app = express();
@@ -15,6 +16,11 @@ const helmet = require("helmet");
 const cors = require("cors");
 const xss = require("xss-clean");
 const rateLimiter = require("express-rate-limit");
+
+// swagger ui
+const swaggerUi = require("swagger-ui-express");
+const YAML = require("yamljs");
+const swaggerDocument = YAML.load("./swagger.yaml"); //load document
 
 // app.set("trust proxy", 1) //using reverse proxies like Heroku
 app.use(
@@ -33,8 +39,10 @@ app.use(xss());
 const wordsRouter = require("./routes/words");
 
 app.get("/", (req, res) => {
-    res.send("Navajo Dictionary API");
+    res.send('<h1>Navajo Dictionary API</h1> <a href="/api-docs"/> ');
 });
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Words route
 app.use("/api/v1/words", wordsRouter);
