@@ -9,7 +9,7 @@ const {
     updateWord,
 } = require("../controllers/words");
 
-router.route("/").get(getAllWords);
+router.route("/").get(getAllWords).put(addWord);
 router.route("/:id").get(getWord).patch(updateWord);
 // router.route("/static").get(getAllWordsStatic);
 // router.route("/static/:id").get(getAllWordsStatic);

@@ -35,14 +35,14 @@ const wordChanges = new mongoose.Schema(
 
 // validate that one parameter is provided
 wordChanges.pre("validate", function (next) {
+    // console.log(this);
+    // console.log(this.examples.length);
     if (
-        !(
-            this.word &&
-            this.wordDefinitions &&
-            this.wordAudio &&
-            this.examples &&
-            this.examplesAudio
-        )
+        !this.word &&
+        this.wordDefinitions !== [""] &&
+        !this.wordAudio &&
+        this.examples.length !== [""] &&
+        this.examplesAudio.length !== [""]
     ) {
         return next(
             new Error(
