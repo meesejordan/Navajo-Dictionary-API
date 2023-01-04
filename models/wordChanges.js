@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 
 // rather than changing the word, it is created in a different collection
 // to be vetted and any changes will be made to the Word collection
-const wordToAddSchema = new mongoose.Schema(
+const wordChanges = new mongoose.Schema(
     {
         wordId: {
             type: mongoose.Types.ObjectId,
@@ -34,17 +34,23 @@ const wordToAddSchema = new mongoose.Schema(
 );
 
 // validate that one parameter is provided
-wordToAddSchema.pre("validate", function (next) {
+wordChanges.pre("validate", function (next) {
     if (
-        !this.word ||
-        !this.wordDefinitions ||
-        !this.wordAudio ||
-        !this.examples ||
-        !this.examplesAudio
+        !(
+            this.word &&
+            this.wordDefinitions &&
+            this.wordAudio &&
+            this.examples &&
+            this.examplesAudio
+        )
     ) {
-        return next(new Error("At least one field must be provided"));
+        return next(
+            new Error(
+                "At least one field must be provided and fields cannot be empty"
+            )
+        );
     }
     next();
 });
 
-module.exports = mongoose.model("WordToAdd", wordToAddSchema);
+module.exports = mongoose.model("WordToAdd", wordChanges);

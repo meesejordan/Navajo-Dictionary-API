@@ -1,5 +1,5 @@
 const Word = require("../models/word");
-const WordToAdd = require("../models/wordToAdd");
+const wordChanges = require("../models/wordChanges");
 
 const { StatusCodes } = require("http-status-codes");
 const { mongoose } = require("mongoose");
@@ -88,7 +88,7 @@ const getWord = async (req, res) => {
     res.status(StatusCodes.OK).json({ word, numWords: word.length });
 };
 
-const addWord = async (req, res) => {
+const updateWord = async (req, res) => {
     const {
         params: { id: wordId },
     } = req;
@@ -110,16 +110,18 @@ const addWord = async (req, res) => {
         return;
     }
 
+    // if ()
     // add the Word id to change, as a property of the WordToAdd
     req.body.wordId = wordId;
-    const wordToAdd = await WordToAdd.create(req.body);
+    const wordToAdd = await wordChanges.create(req.body);
     // res.send("addWord");
-    res.status(StatusCodes.CREATED).json({ wordToAdd });
+    res.status(StatusCodes.CREATED).json({ word: wordToAdd });
 };
 
 module.exports = {
     getAllWords,
     getAllWordsStatic,
     getWord,
-    addWord,
+    // addWord,
+    updateWord,
 };

@@ -6,10 +6,11 @@ const {
     // getAllWordsStatic,
     getWord,
     addWord,
+    updateWord,
 } = require("../controllers/words");
 
 router.route("/").get(getAllWords);
-router.route("/:id").get(getWord).post(addWord);
+router.route("/:id").get(getWord).patch(updateWord);
 // router.route("/static").get(getAllWordsStatic);
 // router.route("/static/:id").get(getAllWordsStatic);
 
