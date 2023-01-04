@@ -1,5 +1,6 @@
 const Word = require("../models/word");
-// const notFoundError = require("../middleware/not-found");
+const WordToAdd = require("../models/wordToAdd");
+
 const { StatusCodes } = require("http-status-codes");
 const { mongoose } = require("mongoose");
 
@@ -87,8 +88,38 @@ const getWord = async (req, res) => {
     res.status(StatusCodes.OK).json({ word, numWords: word.length });
 };
 
+const addWord = async (req, res) => {
+    const {
+        params: { id: wordId },
+    } = req;
+
+    // check if wordId is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(wordId)) {
+        res.status(StatusCodes.UNPROCESSABLE_ENTITY).send(
+            `${wordId} is not a valid id`
+        );
+        return;
+    }
+
+    // get word with matching id
+    const word = await Word.findOne({ _id: wordId });
+
+    // if no word exits, throw error
+    if (!word) {
+        res.status(StatusCodes.NOT_FOUND).send(`No word with id ${jobId}`);
+        return;
+    }
+
+    // add the Word id to change, as a property of the WordToAdd
+    req.body.wordId = wordId;
+    const wordToAdd = await WordToAdd.create(req.body);
+    // res.send("addWord");
+    res.status(StatusCodes.CREATED).json({ wordToAdd });
+};
+
 module.exports = {
     getAllWords,
     getAllWordsStatic,
     getWord,
+    addWord,
 };
