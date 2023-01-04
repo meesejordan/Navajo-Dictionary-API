@@ -1,7 +1,7 @@
 const Word = require("../models/word");
 // const notFoundError = require("../middleware/not-found");
 const { StatusCodes } = require("http-status-codes");
-const { default: mongoose } = require("mongoose");
+const { mongoose } = require("mongoose");
 
 const getAllWordsStatic = async (req, res) => {
     // const queryObject = {};
@@ -79,8 +79,8 @@ const getWord = async (req, res) => {
 
     // if no word exits, throw error
     if (!word) {
-        res.status(StatusCodes.NOT_FOUND).send(`No job with id ${jobId}`);
-        // throw new notFoundError(`No job with id ${jobId}`);
+        res.status(StatusCodes.NOT_FOUND).send(`No word with id ${jobId}`);
+        return;
     }
 
     // send word with matching id
