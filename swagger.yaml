@@ -62,7 +62,7 @@ paths:
 
             deprecated: false
 
-    /word/{id}:
+    /words/{id}:
         get:
             summary: Get a Word by ID
             tags:
