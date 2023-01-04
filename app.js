@@ -39,7 +39,9 @@ app.use(xss());
 const wordsRouter = require("./routes/words");
 
 app.get("/", (req, res) => {
-    res.send('<h1>Navajo Dictionary API</h1> <a href="/api-docs"/> ');
+    res.send(
+        '<h1>Navajo Dictionary API</h1> <a href="/api-docs"/>Documentation</a> '
+    );
 });
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
