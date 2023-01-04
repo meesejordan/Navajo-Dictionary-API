@@ -8,9 +8,6 @@ const app = express();
 // connect to database
 const connectDB = require("./db/connectDB");
 
-// import middleware
-const notFoundMiddleware = require("./middleware/not-found");
-
 // extra security packages
 const helmet = require("helmet");
 const cors = require("cors");
@@ -37,6 +34,7 @@ app.use(xss());
 
 // import routers
 const wordsRouter = require("./routes/words");
+const errorHandlerMiddleware = require("./middleware/error-handler");
 
 app.get("/", (req, res) => {
     res.send(
@@ -50,7 +48,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/v1/words", wordsRouter);
 
 // middle ware
-app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 // set port
 const port = process.env.PORT || 3000;
