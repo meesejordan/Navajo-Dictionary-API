@@ -13,6 +13,11 @@ const wordSchema = new mongoose.Schema(
             type: String,
             required: [true, "Navajo word must be provided"],
             unique: true,
+            validate: function isValidString(str1) {
+                return (
+                    str1 != null && typeof str1 === "string" && str1.length > 0
+                );
+            },
         },
         wordDefinitions: {
             type: [String],
@@ -20,16 +25,40 @@ const wordSchema = new mongoose.Schema(
                 true,
                 "One Definition for the given Navajo word must be provided",
             ],
+            // validate: function isValidArray(arr1) {
+            //     return arr1 && typeof arr1 === "object" && arr1.length > 0;
+            // },
         },
         wordAudio: {
             type: String,
+            validate: function isValidString(str1) {
+                return (
+                    str1 != null && typeof str1 === "string" && str1.length > 0
+                );
+            },
         },
         examples: {
             type: [String],
+            // validate: function isValidArray(arr1) {
+            //     return arr1 && typeof arr1 === "object" && arr1.length > 0;
+            // },
         },
-        examplesAudio: [String],
+        examplesAudio: {
+            type: [String],
+        },
     },
     { timestamps: true }
 );
+
+wordSchema.pre("validate", function (next) {
+    console.log(this);
+    // console.log(this.examples.length);
+    if (!this.word || this.wordDefinitions === [] || this.word === []) {
+        return next(
+            new Error("Fields 'word' and 'wordDefinitions' can not be empty")
+        );
+    }
+    next();
+});
 
 module.exports = mongoose.model("Word", wordSchema);

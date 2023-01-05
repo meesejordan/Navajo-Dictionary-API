@@ -90,8 +90,70 @@ const getWord = async (req, res) => {
 };
 
 const addWord = async (req, res) => {
-    const word = await WordToAdd.create(req.body); // use mongoose validation
-    res.status(StatusCodes.OK).send({ word });
+    // check that word and wordDefinitions are given
+    if (!req.body.word || !req.body.wordDefinitions.length) {
+        return res
+            .status(StatusCodes.UNPROCESSABLE_ENTITY)
+            .json({ msg: "Must include word AND wordDefinitions" });
+    }
+
+    //validate that wordDefinitions is an array
+    if (!validateArray(req.body.wordDefinitions)) {
+        return res
+            .status(StatusCodes.UNPROCESSABLE_ENTITY)
+            .json({ msg: "wordDefinitions can NOT be empty" });
+    }
+
+    // validate that values in wordDefinitions is non-empty strings
+    if (!validateArrayOfStrings(req.body.wordDefinitions)) {
+        return res
+            .status(StatusCodes.UNPROCESSABLE_ENTITY)
+            .json({ msg: "wordDefinitions can NOT be empty" });
+    }
+
+    // check if wordAudio is present
+    if (req.body.wordAudio != null) {
+        // check that the given values is a non-empty string
+        if (!validateString(req.body.wordAudio)) {
+            return res
+                .status(StatusCodes.UNPROCESSABLE_ENTITY)
+                .json({ msg: "wordAudio must be a non-empty string" });
+        }
+    }
+
+    // check if wordAudio is present
+    if (req.body.examplesAudio != null) {
+        // check that the given values is a non-empty string
+        if (!validateArray(req.body.examplesAudio)) {
+            return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+                msg: "examplesAudio must be non-empty array of non-empty strings",
+            });
+        }
+        if (!validateArrayOfStrings(req.body.examplesAudio)) {
+            return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+                msg: "Values in examplesAudio must be a non-empty string",
+            });
+        }
+    }
+
+    // check if examples exist
+    if (req.body.examples != null) {
+        // check that the given values is a non-empty astring
+        if (!validateArray(req.body.examples)) {
+            return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+                msg: "examples must be a non-empty array of non-empty strings",
+            });
+        }
+        if (!validateArrayOfStrings(req.body.examples)) {
+            return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+                msg: "Values in examples must be a non-empty string",
+            });
+        }
+    }
+
+    // const word = await Word.create(req.body);
+    // res.status(StatusCodes.OK).json({ word });
+    res.send("ok");
 };
 
 const updateWord = async (req, res) => {
@@ -112,8 +174,9 @@ const updateWord = async (req, res) => {
 
     // if no word exits, throw error
     if (!word) {
-        res.status(StatusCodes.NOT_FOUND).send(`No word with id ${jobId}`);
-        return;
+        return res
+            .status(StatusCodes.NOT_FOUND)
+            .send(`No word with id ${jobId}`);
     }
 
     // add the Word id to change, as a property of the WordToAdd
@@ -125,6 +188,40 @@ const updateWord = async (req, res) => {
     res.status(StatusCodes.CREATED).json({ word: Wordchanges });
 };
 
+const validateArrayOfStrings = (arr1) => {
+    let isValid = true;
+    arr1.map((val) => {
+        if (
+            !(
+                val !== "" &&
+                val !== " " &&
+                typeof val === "string" &&
+                val.length > 0
+            )
+        ) {
+            isValid = false;
+        }
+    });
+
+    return isValid;
+};
+
+const validateArray = (arr1) => {
+    let isValid = true;
+    if (!(arr1 && typeof arr1 === "object" && arr1.length > 0)) {
+        isValid = false;
+    }
+
+    return isValid;
+};
+
+const validateString = (str1) => {
+    let isValid = true;
+    if (!(str1 !== "" && typeof str1 === "string" && str1.length > 0)) {
+        isValid = false;
+    }
+    return isValid;
+};
 module.exports = {
     getAllWords,
     getAllWordsStatic,
