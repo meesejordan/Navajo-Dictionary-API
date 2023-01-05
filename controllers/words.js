@@ -1,6 +1,7 @@
 const Word = require("../models/word");
 const WordChanges = require("../models/wordChanges");
 const WordToAdd = require("../models/wordToAdd");
+const WordsToDelete = require("../models/wordToDelete");
 
 const { StatusCodes } = require("http-status-codes");
 
@@ -96,9 +97,31 @@ const updateWord = async (req, res) => {
     res.status(StatusCodes.CREATED).json({ word: wordChanges });
 };
 
+const deleteWord = async (req, res) => {
+    // get id from paramters
+    const {
+        params: { id: wordId },
+    } = req;
+
+    // get word with matching id
+    const word = await Word.findOne({ _id: wordId });
+
+    // if no word exits, throw error
+    if (!word) {
+        res.status(StatusCodes.NOT_FOUND).send(`No word with id ${jobId}`);
+        return;
+    }
+
+    req.body.wordIdToDelete = wordId;
+    console.log(req.body);
+    const wordToDelete = await WordsToDelete.create(req.body);
+
+    res.status(StatusCodes.ACCEPTED).json({ word: wordToDelete });
+};
 module.exports = {
     getAllWords,
     getWord,
     addWord,
     updateWord,
+    deleteWord,
 };

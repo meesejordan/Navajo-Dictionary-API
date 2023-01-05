@@ -14,11 +14,13 @@ const {
     getWord,
     addWord,
     updateWord,
+    deleteWord,
 } = require("../controllers/words");
 
-router.route("/").get(getAllWords).put(addWord);
+router.route("/").get(getAllWords).put(addWordValidator, addWord);
 router
     .route("/:id")
+    .delete(IdValidator, deleteWord)
     .get(IdValidator, getWord)
     .patch(IdValidator, updateWordValidator, updateWord);
 // router.route("/static").get(getAllWordsStatic);
