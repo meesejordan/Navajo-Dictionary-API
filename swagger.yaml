@@ -56,13 +56,13 @@ paths:
 
             responses:
                 "200":
-                    description: "Successfully got words"
+                    description: "Successfully got words."
 
                     headers: {}
 
             deprecated: false
 
-    /words/{id}:
+    /word/{id}:
         get:
             summary: Get a Word by ID
             tags:
@@ -73,20 +73,47 @@ paths:
                   schema:
                       type: string
                   required: true
-                  description: Numeric ID of the user to get
+                  description: Numeric ID of the Word to get
             responses:
                 "200":
-                    description: "Successfully found a Word with matching id"
+                    description: "Successfully found a Word with matching id."
 
                     headers: {}
 
                 "404":
-                    description: "No Word was found with given id"
+                    description: "No Word was found with given id."
 
                     headers: {}
 
                 "422":
-                    description: "Given id is not a valid mongoose Objectid id"
+                    description: "Given id is not a valid mongoose Objectid id."
+
+                    headers: {}
+
+        post:
+            summary: Add Changes to Word by ID
+            tags:
+                - Words
+            parameters:
+                - in: path
+                  name: id
+                  schema:
+                      type: string
+                  required: true
+                  description: Numeric ID of the Word that you want to change
+            responses:
+                "201":
+                    description: "Successfully created a Word with matching id, and submitted changes."
+
+                    headers: {}
+
+                "404":
+                    description: "No Word was found with given id."
+
+                    headers: {}
+
+                "422":
+                    description: "Given id is not a valid mongoose Objectid id."
 
                     headers: {}
 

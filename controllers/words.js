@@ -3,22 +3,6 @@ const WordChanges = require("../models/wordChanges");
 const WordToAdd = require("../models/wordToAdd");
 
 const { StatusCodes } = require("http-status-codes");
-const { mongoose } = require("mongoose");
-
-const getAllWordsStatic = async (req, res) => {
-    // const queryObject = {};
-    const {
-        params: { id: wordId },
-    } = req;
-    console.log(wordId);
-    // queryObject.wordDefinitions = { $regex: "it", $options: "i" };
-    // const words = await Word.find(queryObject).sort("word").select("");
-    const words = await Word.findOne({
-        _id: "63b383cd227e1ecb14d4930d",
-    });
-
-    res.status(StatusCodes.OK).json({ words, numWords: words.length });
-};
 
 const getAllWords = async (req, res) => {
     // console.log(req.query);
@@ -68,14 +52,6 @@ const getWord = async (req, res) => {
         params: { id: wordId },
     } = req;
 
-    // check if wordId is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(wordId)) {
-        res.status(StatusCodes.UNPROCESSABLE_ENTITY).send(
-            `${wordId} is not a valid id`
-        );
-        return;
-    }
-
     // get word with matching id
     const word = await Word.findOne({ _id: wordId });
 
@@ -90,67 +66,7 @@ const getWord = async (req, res) => {
 };
 
 const addWord = async (req, res) => {
-    // check that word and wordDefinitions are given
-    if (!req.body.word || !req.body.wordDefinitions.length) {
-        return res
-            .status(StatusCodes.UNPROCESSABLE_ENTITY)
-            .json({ msg: "Must include word AND wordDefinitions" });
-    }
-
-    //validate that wordDefinitions is an array
-    if (!validateArray(req.body.wordDefinitions)) {
-        return res
-            .status(StatusCodes.UNPROCESSABLE_ENTITY)
-            .json({ msg: "wordDefinitions can NOT be empty" });
-    }
-
-    // validate that values in wordDefinitions is non-empty strings
-    if (!validateArrayOfStrings(req.body.wordDefinitions)) {
-        return res
-            .status(StatusCodes.UNPROCESSABLE_ENTITY)
-            .json({ msg: "wordDefinitions can NOT be empty" });
-    }
-
-    // check if wordAudio is present
-    if (req.body.wordAudio != null) {
-        // check that the given values is a non-empty string
-        if (!validateString(req.body.wordAudio)) {
-            return res
-                .status(StatusCodes.UNPROCESSABLE_ENTITY)
-                .json({ msg: "wordAudio must be a non-empty string" });
-        }
-    }
-
-    // check if wordAudio is present
-    if (req.body.examplesAudio != null) {
-        // check that the given values is a non-empty string
-        if (!validateArray(req.body.examplesAudio)) {
-            return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-                msg: "examplesAudio must be non-empty array of non-empty strings",
-            });
-        }
-        if (!validateArrayOfStrings(req.body.examplesAudio)) {
-            return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-                msg: "Values in examplesAudio must be a non-empty string",
-            });
-        }
-    }
-
-    // check if examples exist
-    if (req.body.examples != null) {
-        // check that the given values is a non-empty astring
-        if (!validateArray(req.body.examples)) {
-            return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-                msg: "examples must be a non-empty array of non-empty strings",
-            });
-        }
-        if (!validateArrayOfStrings(req.body.examples)) {
-            return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
-                msg: "Values in examples must be a non-empty string",
-            });
-        }
-    }
-
+    // res.status(StatusCodes.OK).send("passed validation");
     const word = await WordToAdd.create(req.body);
     res.status(StatusCodes.OK).json({ word });
 };
@@ -159,14 +75,6 @@ const updateWord = async (req, res) => {
     const {
         params: { id: wordId },
     } = req;
-
-    // check if wordId is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(wordId)) {
-        res.status(StatusCodes.UNPROCESSABLE_ENTITY).send(
-            `${wordId} is not a valid id`
-        );
-        return;
-    }
 
     // get word with matching id
     const word = await Word.findOne({ _id: wordId });
@@ -182,48 +90,14 @@ const updateWord = async (req, res) => {
     req.body.wordId = wordId;
 
     // add Word changes to collection Word
-    const Wordchanges = await WordChanges.create(req.body);
-    // res.send("addWord");
-    res.status(StatusCodes.CREATED).json({ word });
+    const wordChanges = await WordChanges.create(req.body);
+
+    // res.status(200).send("passed update validation");
+    res.status(StatusCodes.CREATED).json({ word: wordChanges });
 };
 
-const validateArrayOfStrings = (arr1) => {
-    let isValid = true;
-    arr1.map((val) => {
-        if (
-            !(
-                val !== "" &&
-                val !== " " &&
-                typeof val === "string" &&
-                val.length > 0
-            )
-        ) {
-            isValid = false;
-        }
-    });
-
-    return isValid;
-};
-
-const validateArray = (arr1) => {
-    let isValid = true;
-    if (!(arr1 && typeof arr1 === "object" && arr1.length > 0)) {
-        isValid = false;
-    }
-
-    return isValid;
-};
-
-const validateString = (str1) => {
-    let isValid = true;
-    if (!(str1 !== "" && typeof str1 === "string" && str1.length > 0)) {
-        isValid = false;
-    }
-    return isValid;
-};
 module.exports = {
     getAllWords,
-    getAllWordsStatic,
     getWord,
     addWord,
     updateWord,

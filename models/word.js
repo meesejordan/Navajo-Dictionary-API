@@ -50,14 +50,4 @@ const wordSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-wordSchema.pre("validate", function (next) {
-    // console.log(this.examples.length);
-    if (!this.word || this.wordDefinitions === [] || this.word === []) {
-        return next(
-            new Error("Fields 'word' and 'wordDefinitions' can not be empty")
-        );
-    }
-    next();
-});
-
 module.exports = mongoose.model("Word", wordSchema);
