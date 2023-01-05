@@ -38,11 +38,11 @@ wordChanges.pre("validate", function (next) {
     // console.log(this);
     // console.log(this.examples.length);
     if (
-        !this.word &&
-        this.wordDefinitions !== [""] &&
+        this.word === null &&
+        this.wordDefinitions === null &&
         !this.wordAudio &&
-        this.examples.length !== [""] &&
-        this.examplesAudio.length !== [""]
+        this.examples.length === null &&
+        this.examplesAudio.length === null
     ) {
         return next(
             new Error(
@@ -53,4 +53,4 @@ wordChanges.pre("validate", function (next) {
     next();
 });
 
-module.exports = mongoose.model("WordToAdd", wordChanges);
+module.exports = mongoose.model("WordChange", wordChanges);

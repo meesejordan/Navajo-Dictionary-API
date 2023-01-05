@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 // examplesAudio => array of urls of the given examples. ex: [ //"https://dl.dropbox.com/s/z3gm2v9ezt4vdk1/commonNavajo-1-0", //"https://dl.dropbox.com/s/j0g7iy2gmjig1k8/commonNavajo-1-1", // ],
 
 // 'examples' indices map to 'examplesAudio'. IFF examplesAudio exist
-const wordSchema = new mongoose.Schema(
+const wordToAddSchema = new mongoose.Schema(
     {
         word: {
             type: String,
@@ -25,9 +25,6 @@ const wordSchema = new mongoose.Schema(
                 true,
                 "One Definition for the given Navajo word must be provided",
             ],
-            // validate: function isValidArray(arr1) {
-            //     return arr1 && typeof arr1 === "object" && arr1.length > 0;
-            // },
         },
         wordAudio: {
             type: String,
@@ -39,9 +36,6 @@ const wordSchema = new mongoose.Schema(
         },
         examples: {
             type: [String],
-            // validate: function isValidArray(arr1) {
-            //     return arr1 && typeof arr1 === "object" && arr1.length > 0;
-            // },
         },
         examplesAudio: {
             type: [String],
@@ -50,7 +44,7 @@ const wordSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-wordSchema.pre("validate", function (next) {
+wordToAddSchema.pre("validate", function (next) {
     // console.log(this.examples.length);
     if (!this.word || this.wordDefinitions === [] || this.word === []) {
         return next(
@@ -60,4 +54,4 @@ wordSchema.pre("validate", function (next) {
     next();
 });
 
-module.exports = mongoose.model("Word", wordSchema);
+module.exports = mongoose.model("WordToAdd", wordToAddSchema);

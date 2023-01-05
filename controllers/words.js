@@ -1,6 +1,6 @@
 const Word = require("../models/word");
-const wordChanges = require("../models/wordChanges");
-const WordToAdd = require("../models/word");
+const WordChanges = require("../models/wordChanges");
+const WordToAdd = require("../models/wordToAdd");
 
 const { StatusCodes } = require("http-status-codes");
 const { mongoose } = require("mongoose");
@@ -151,9 +151,8 @@ const addWord = async (req, res) => {
         }
     }
 
-    // const word = await Word.create(req.body);
-    // res.status(StatusCodes.OK).json({ word });
-    res.send("ok");
+    const word = await WordToAdd.create(req.body);
+    res.status(StatusCodes.OK).json({ word });
 };
 
 const updateWord = async (req, res) => {
@@ -183,9 +182,9 @@ const updateWord = async (req, res) => {
     req.body.wordId = wordId;
 
     // add Word changes to collection Word
-    const Wordchanges = await wordChanges.create(req.body);
+    const Wordchanges = await WordChanges.create(req.body);
     // res.send("addWord");
-    res.status(StatusCodes.CREATED).json({ word: Wordchanges });
+    res.status(StatusCodes.CREATED).json({ word });
 };
 
 const validateArrayOfStrings = (arr1) => {
