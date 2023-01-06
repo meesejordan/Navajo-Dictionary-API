@@ -1,123 +1,273 @@
 openapi: 3.0.0
 
 info:
-    title: Navajo-Dictionary-API
-    description: "This is a simple sample Navajo Dictionary API. My goal was to teach myself how to create a RESTful API and is to aid those that are currently learning how to program. This also serves as a public resource for those that want to use Navajo words in a meaningful way such as creating learning games as the Navajo language is considered a dying Language"
 
-    contact: {}
+  title: Navajo-Dictionary-API
+  description : 'This is a simple sample Navajo Dictionary API. My goal was to teach myself how to create a RESTful API and is to aid those that are currently learning how to program. This also serves as a public resource for those that want to use Navajo words in a meaningful way such as creating learning games as the Navajo language is considered a dying Language'
 
-    version: "1.0"
+  contact: {}
+
+  version: '1.0'
 
 servers:
-    - url: https://navajo-dictionary-api.up.railway.app/api/v1
 
-      variables: {}
+- url: https://navajo-dictionary-api.up.railway.app/api/v1
+
+  variables: {}
 
 paths:
-    /words:
-        get:
-            tags:
-                - Words
 
-            summary: Get All Words.
+  /words:
 
-            operationId: GetAllWords
+    get:
 
-            parameters:
-                - in: query
-                  name: search
-                  schema:
-                      type: string
-                  description: Search an english word to match inside all Word definitions
+      tags:
 
-                - in: query
-                  name: sort
-                  schema:
-                      type: string
-                  description: Sort on the fields given
+      - Words
 
-                - in: query
-                  name: fields
-                  schema:
-                      type: string
-                  description: Return only the fields in the Words given
+      summary: Get All Words.
 
-                - in: query
-                  name: page
-                  schema:
-                      type: integer
-                  description: Get Words on given page number, default is 1
+      operationId: GetAllWords
 
-                - in: query
-                  name: limit
-                  schema:
-                      type: integer
-                  description: Limit number of Words per page, default is 10
+      parameters: 
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search an english word to match inside all Word definitions
+          
+        - in: query
+          name: sort
+          schema:
+            type: string
+          description: Sort on the fields given
+          
+        - in: query
+          name: fields
+          schema:
+            type: string
+          description: Return only the fields in the Words given
+          
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Get Words on given page number, default is 1
+          
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          description: Limit number of Words per page, default is 10
+          
+      responses:
+        '200':
+          description: 'Successfully got words.'
+          headers: {}
+      deprecated: false
+      
+    put:
+      summary: Add Word.
+      requestBody:
+        description: Word values that are being added.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  description: Must be unique
+                  type: string
+                  example: Yá'át'ééh
+                wordDefinitions:
+                  type: array
+                  items: 
+                    type: string
+                    example: [Hello, It is good, Greetings]
+                wordAudio: 
+                  type: string
+                  example: navajowordaudio.mp3
+                examples:
+                  type: array
+                  items:
+                    type: string
+                    example: [
+            "Yá'át'ééh dóó ahéehee:Hello and thank you",
+            "Yá'át'ééh abini:Good morning"
+        ]
+                examplesAudio:
+                  type: array
+                  items:
+                    type: string
+                    example : [
+                        "example1audio.mp3",
+                        "example2audio.mp3"]
+                      
+      tags:
+      - Words
+      
+      responses:
 
-            responses:
-                "200":
-                    description: "Successfully got words."
+        '200':
 
-                    headers: {}
+          description: 'Successfully created a Word with provide request body'
 
-            deprecated: false
+          headers: {}
 
-    /word/{id}:
-        get:
-            summary: Get a Word by ID
-            tags:
-                - Words
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                      type: string
-                  required: true
-                  description: Numeric ID of the Word to get
-            responses:
-                "200":
-                    description: "Successfully found a Word with matching id."
+        '422':
 
-                    headers: {}
+          description: 'Data in request body is malformed.'
 
-                "404":
-                    description: "No Word was found with given id."
+          headers: {}
+  
+  /word/{id}:
+    get:
+      summary: Get a Word by ID
+      tags:
+      - Words
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Numeric ID of the Word to get
+      responses:
 
-                    headers: {}
+        '200':
 
-                "422":
-                    description: "Given id is not a valid mongoose Objectid id."
+          description: 'Successfully found a Word with matching id.'
 
-                    headers: {}
+          headers: {}
 
-        post:
-            summary: Add Changes to Word by ID
-            tags:
-                - Words
-            parameters:
-                - in: path
-                  name: id
-                  schema:
-                      type: string
-                  required: true
-                  description: Numeric ID of the Word that you want to change
-            responses:
-                "201":
-                    description: "Successfully created a Word with matching id, and submitted changes."
+        '404':
 
-                    headers: {}
+          description: 'No Word was found with given id.'
 
-                "404":
-                    description: "No Word was found with given id."
+          headers: {}
 
-                    headers: {}
+        '422':
 
-                "422":
-                    description: "Given id is not a valid mongoose Objectid id."
+          description: 'Given id is not a valid mongoose Objectid id.'
 
-                    headers: {}
+          headers: {}
+          
+          
+    patch:
+    
+      summary: Add Changes to Word by ID
+      
+      tags:
+      - Words
+      
+      parameters:
+        - in: path
+        
+          name: id
+          
+          schema:
+            type: string
+            
+          required: true
+          
+          description: Numeric ID of the Word that you want to change
+          
+      requestBody:
+        description: Adding fields to Word with id wordId. 
+        
+        required: true
+        
+        content:
+          application/json:
+            schema:
+            
+              type: object
+              properties:
+                wordId:
+                  type: string
+                  example: "63b383cd227e1ecb14d49308"
+                  description: The required id of the Word that is being changed.
+                word:
+                  type: string
+                  example: 
+                wordDefinitions:
+                  type: array
+                  items: 
+                    type: string
+                    example: "Whose"
+                wordAudio: 
+                  type: string
+                  example: 
+                examples:
+                  type: array
+                  items:
+                    type: string
+                    example: "Háish bí gah:Whose rabbit is this?"
+                examplesAudio:
+                  type: array
+                  items:
+                    type: string
+                    example : 
+                        "example1audio.mp3"
+      responses:
+
+        '201':
+
+          description: 'Successfully updated Word with matching id, and submitted changes.'
+
+          headers: {}
+
+        '404':
+
+          description: 'No Word was found with given id.'
+
+          headers: {}
+
+        '422':
+
+          description: 'Given id is not a valid mongoose Objectid id or request body is malformed'
+
+          headers: {}
+
+
+    
+
+    delete:
+      summary: Add Changes to Word by ID
+      tags:
+      - Words
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: Numeric ID of the Word that you want to change
+      responses:
+
+        '202':
+
+          description: 'Success, but not enacted.'
+
+          headers: {}
+
+        '404':
+
+          description: 'No Word was found with given id.'
+
+          headers: {}
+
+        '422':
+
+          description: 'Given id is not a valid mongoose Objectid id.'
+
+          headers: {}
+      
+        
 
 tags:
-    - name: Words
+- name: Words
 
-      description: ""
+  description: ''
+

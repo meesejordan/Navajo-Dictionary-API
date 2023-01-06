@@ -116,7 +116,7 @@ const deleteWord = async (req, res) => {
     console.log(req.body);
     const wordToDelete = await WordsToDelete.create(req.body);
 
-    res.status(StatusCodes.ACCEPTED).json({ word: wordToDelete });
+    res.status(StatusCodes.OK).json({ word: wordToDelete });
 };
 module.exports = {
     getAllWords,
