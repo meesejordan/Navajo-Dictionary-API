@@ -213,7 +213,7 @@ paths:
                     headers: {}
 
         delete:
-            summary: Add Changes to Word by ID
+            summary: Delete Word by ID
             tags:
                 - Words
             parameters:

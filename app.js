@@ -38,7 +38,7 @@ const errorHandlerMiddleware = require("./middleware/error-handler");
 
 app.get("/", (req, res) => {
     res.send(
-        '<h1>Navajo Dictionary API</h1> <a href="/api-docs"/>Documentation</a> '
+        '<h1>Navajo Dictionary API</h1> <a href="/api-docs"/>Documentation</a> <br/> <a href="https://github.com/meesejordan/Navajo-Dictionary-API">Code</a>'
     );
 });
 
