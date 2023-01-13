@@ -7,7 +7,8 @@ const { StatusCodes } = require("http-status-codes");
 
 const getAllWords = async (req, res) => {
     // console.log(req.query);
-    const { search, fields } = req.query;
+    const { search, fields, random } = req.query;
+
     const queryObject = {};
     let sortList = "";
     let fieldsList = "";
@@ -27,6 +28,14 @@ const getAllWords = async (req, res) => {
     // Select current fields, like SQL select
     if (fields) {
         fieldsList = fields.split(",").join(" ");
+    }
+
+    if (random && random === "true") {
+        // console.log("random", random);
+        const result = await Word.aggregate([{ $sample: { size: 1 } }]);
+        return res
+            .status(StatusCodes.OK)
+            .json({ result, numWords: result.length });
     }
 
     // paganation

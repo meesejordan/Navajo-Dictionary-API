@@ -43,6 +43,12 @@ paths:
                   description: Return only the fields in the Words given
 
                 - in: query
+                  name: random
+                  schema:
+                      type: boolean
+                  description: return random word.
+
+                - in: query
                   name: page
                   schema:
                       type: integer
