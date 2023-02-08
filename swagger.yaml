@@ -2,14 +2,14 @@ openapi: 3.0.0
 
 info:
     title: Navajo-Dictionary-API
-    description: "This is a simple sample Navajo Dictionary API. My goal was to teach myself how to create a RESTful API and is to aid those that are currently learning how to program. This also serves as a public resource for those that want to use Navajo words in a meaningful way such as creating learning games as the Navajo language is considered a dying Language"
+    description: "This is a simple sample Navajo Dictionary API. My goal was to teach myself how to create a RESTful API and is to aid those that are currently learning how to program. This also serves as a public resource for those that want to use Navajo words in a meaningful way such as creating learning games as the Navajo language is considered a dying Language. \n\n[Source code](https://github.com/meesejordan/Navajo-Dictionary-API)\n\n[API URL](https://18.220.127.242.nip.io/)"
 
     contact: {}
 
     version: "1.0"
 
 servers:
-    - url: https://navajo-dictionary-api.up.railway.app/api/v1
+    - url: https://18.220.127.242.nip.io/api/v1
 
       variables: {}
 
