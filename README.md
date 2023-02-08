@@ -1,3 +1,2 @@
-#Navajo-Dictionary-API
- 
- https://navajo-dictionary-api.up.railway.app/
+Navajo-Dictionary-API
+Documentation: https://meesejordan.github.io/Navajo-Dictionary-API-Docs/
