@@ -30,14 +30,6 @@ const getAllWords = async (req, res) => {
         fieldsList = fields.split(",").join(" ");
     }
 
-    if (random && random === "true") {
-        // console.log("random", random);
-        const result = await Word.aggregate([{ $sample: { size: 1 } }]);
-        return res
-            .status(StatusCodes.OK)
-            .json({ result, numWords: result.length });
-    }
-
     // paganation
     // get page number if given, default is 1
     const page = Number(req.query.page) || 1;
@@ -45,6 +37,17 @@ const getAllWords = async (req, res) => {
     const limit = Number(req.query.limit) || 10;
     // calculate how many words to skip
     const skip = (page - 1) * limit;
+
+    if (random && random === "true") {
+        // Get number of random words, if no value provided return 1 word
+        randomLimit = Number(req.query.limit) || 1;
+        const result = await Word.aggregate([
+            { $sample: { size: randomLimit } },
+        ]);
+        return res
+            .status(StatusCodes.OK)
+            .json({ result, numWords: result.length });
+    }
 
     // Finally, search words based on search query, get words sorted on given sort value and finally return the fields of the given field values
     let result = await Word.find(queryObject)
