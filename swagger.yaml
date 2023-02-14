@@ -4,6 +4,7 @@ info:
     title: Navajo-Dictionary-API
     description: "This is a simple sample Navajo Dictionary API. My goal was to teach myself how to create a RESTful API and is to aid those that are currently learning how to program. This also serves as a public resource for those that want to use Navajo words in a meaningful way such as creating learning games as the Navajo language is considered a dying Language. \n\n[Source code](https://github.com/meesejordan/Navajo-Dictionary-API)\n\n[API URL](https://18.220.127.242.nip.io/)"
 
+
     contact: {}
 
     version: "1.0"
@@ -46,7 +47,7 @@ paths:
                   name: random
                   schema:
                       type: boolean
-                  description: return random word.
+                  description: return random word, default is 1 but it can be used with limit.
 
                 - in: query
                   name: page
