@@ -1,2 +1,3 @@
 Navajo-Dictionary-API
-Documentation: https://meesejordan.github.io/Navajo-Dictionary-API-Docs/
+Website: https://18.220.127.242.nip.io
+Documentation: https://18.220.127.242.nip.io/api-docs/
