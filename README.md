@@ -1,5 +1,5 @@
 Navajo-Dictionary-API  
-Website: https://18.220.127.242.nip.io  
-Documentation: https://18.220.127.242.nip.io/api-docs/  
+Website: [Server NOT ONLINE](https://meesejordan.github.io/Navajo-Dictionary-API-Docs/)
+Documentation: [Here](https://meesejordan.github.io/Navajo-Dictionary-API-Docs/)
 
 Hosted on AWS EC2 instance with a reverse proxy to enable SSL with caddy and nip.io
